@@ -1,0 +1,16 @@
+import Tesseract from "tesseract.js";
+
+export async function runOCR(canvas) {
+
+  const result =
+    await Tesseract.recognize(
+      canvas,
+      "eng",
+      {
+        logger: (m) =>
+          console.log(m),
+      }
+    );
+
+  return result.data.text;
+}
