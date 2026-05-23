@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route, } from "react-router-dom";
 
 import Home from "../pages/Home";
 import JsonFormatterPage from "../pages/JsonFormatterPage";
@@ -6,12 +7,20 @@ import LogViewerPage from "../pages/LogViewerPage";
 
 export default function Router() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/json" element={<JsonFormatterPage />} />
-        <Route path="/log" element={<LogViewerPage />} />
+
+        <Route
+          path="/json"
+          element={<JsonFormatterPage />}
+        />
+
+        <Route
+          path="/log"
+          element={<LogViewerPage />}
+        />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
