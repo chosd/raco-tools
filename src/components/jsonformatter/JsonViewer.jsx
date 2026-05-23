@@ -26,7 +26,7 @@ export default function JsonViewer({
         line-numbers
         rounded
         overflow-auto
-        bg-zinc-900
+        bg-[var(--color-bg)]
         p-4
         text-sm
       "
