@@ -63,7 +63,8 @@ export default function OCRPreviewPage() {
         onChange={handleUpload}
       />
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        
 
         <div>
           <h2 className="font-bold mb-2">
@@ -102,8 +103,8 @@ export default function OCRPreviewPage() {
 
         <pre
           className="
-            bg-zinc-900
-            text-white
+            bg-[var(--color-bg)]
+            text-[var(--color-text)]
             p-4
             rounded
             overflow-auto

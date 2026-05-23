@@ -1,5 +1,8 @@
 import { useState } from "react";
 
+import Button
+  from "../common/Button";
+
 import JsonTreeNode
   from "./JsonTreeNode";
 
@@ -72,40 +75,27 @@ export default function JsonTreeViewer({
   return (
     <div
       className="
-        bg-zinc-900
-        rounded
-        p-4
         overflow-auto
       "
     >
 
       <div className="flex gap-2 mb-4">
 
-        <button
+        <Button
+          size="sm"
+          variant="success"
           onClick={handleExpandAll}
-          className="
-            px-3 py-1
-            rounded
-            bg-green-600
-            text-white
-            text-sm
-          "
         >
           Expand All
-        </button>
+        </Button>
 
-        <button
+        <Button
+          size="sm"
+          variant="danger"
           onClick={handleCollapseAll}
-          className="
-            px-3 py-1
-            rounded
-            bg-red-600
-            text-white
-            text-sm
-          "
         >
           Collapse All
-        </button>
+        </Button>
 
       </div>
 

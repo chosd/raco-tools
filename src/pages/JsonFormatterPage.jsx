@@ -2,11 +2,26 @@ import { useState } from "react";
 
 import Layout from "../components/common/Layout";
 
+import Card
+  from "../components/common/Card";
+
 import JsonViewer
   from "../components/jsonformatter/JsonViewer";
 
 import JsonTreeViewer
   from "../components/jsonformatter/JsonTreeViewer";
+
+import Toast
+  from "../components/common/Toast";
+
+import Button
+  from "../components/common/Button";
+
+import Textarea
+  from "../components/common/Textarea";
+
+import { useToast }
+  from "../hooks/useToast";
 
 import { formatJson }
   from "../utils/json/formatJson";
@@ -33,7 +48,12 @@ export default function JsonFormatterPage() {
       line: 1,
       col: 1,
     });
-  
+
+  const {
+    toast,
+    showToast,
+  } = useToast();
+
   const updateCursorPosition = (
     e
   ) => {
@@ -61,6 +81,7 @@ export default function JsonFormatterPage() {
       col,
     });
   };
+
   const handleFormat = () => {
 
     try {
@@ -72,41 +93,63 @@ export default function JsonFormatterPage() {
 
       setError("");
 
+      showToast(
+        "JSON 포맷 완료",
+        "success"
+      );
+
     } catch (err) {
 
       setFormatted("");
 
       setError(
         getJsonErrorInfo(
-            input,
-            err
+          input,
+          err
         )
+      );
+
+      showToast(
+        "JSON 파싱 실패",
+        "error"
       );
     }
   };
 
   const handleMinify = () => {
+
     try {
 
-        const result =
+      const result =
         minifyJson(input);
 
-        setFormatted(result);
+      setFormatted(result);
 
-        setError("");
+      setError("");
+
+      showToast(
+        "JSON 압축 완료",
+        "success"
+      );
 
     } catch (err) {
 
-        setFormatted("");
+      setFormatted("");
 
-        setError(
-            getJsonErrorInfo(
-            input,
-            err
-            )
-        );
+      setError(
+        getJsonErrorInfo(
+          input,
+          err
+        )
+      );
+
+      showToast(
+        "JSON 파싱 실패",
+        "error"
+      );
     }
   };
+
   const handleCopy = async () => {
 
     if (!formatted) {
@@ -117,11 +160,21 @@ export default function JsonFormatterPage() {
       formatted
     );
 
-    alert("복사 완료");
+    showToast(
+      "복사 완료",
+      "success"
+    );
   };
 
   return (
     <Layout>
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+        />
+      )}
 
       <div className="flex flex-col gap-4">
 
@@ -129,121 +182,129 @@ export default function JsonFormatterPage() {
           JSON Formatter
         </h2>
 
-        <textarea
-          value={input}
-          onChange={(e) =>{
-            setInput(e.target.value);
-            updateCursorPosition(e);
-          }}
-          onClick={updateCursorPosition}
-          onKeyUp={updateCursorPosition}
-          placeholder="JSON 입력"
-          className="
-            h-64
-            p-4
-            rounded
-            bg-zinc-900
-            text-white
-            font-mono
-          "
-        />
+        <Card>
 
-        <div
-          className="
-            text-xs
-            text-zinc-400
-            font-mono
-          "
-        >
-          Line:
-          {" "}
-          {cursorPos.line}
+          <Textarea
+            value={input}
+            onChange={(e) => {
+              setInput(e.target.value);
+              updateCursorPosition(e);
+            }}
+            onClick={updateCursorPosition}
+            onKeyUp={updateCursorPosition}
+            placeholder="JSON 입력"
+          />
 
-          {" | "}
-
-          Col:
-          {" "}
-          {cursorPos.col}
-        </div>
-
-        <div className="flex gap-2">
-
-          <button
-            onClick={handleFormat}
+          <div
             className="
-              px-4 py-2
-              rounded
-              bg-blue-600
-              text-white
+              mt-2
+              text-xs
+              text-zinc-400
+              font-mono
             "
           >
-            Format
-          </button>
+            Line:
+            {" "}
+            {cursorPos.line}
 
-          <button
-            onClick={handleMinify}
+            {" | "}
+
+            Col:
+            {" "}
+            {cursorPos.col}
+          </div>
+
+        </Card>
+
+        <Card>
+
+          <div
             className="
-                px-4 py-2
-                rounded
-                bg-purple-600
-                text-white
+              flex
+              flex-wrap
+              gap-2
             "
+          >
+
+            <Button onClick={handleFormat}>
+              Format
+            </Button>
+
+            <Button
+              variant="secondary"
+              onClick={handleMinify}
             >
-            Minify
-          </button>
+              Minify
+            </Button>
 
-          <button
-            onClick={handleCopy}
-            className="
-              px-4 py-2
-              rounded
-              bg-zinc-700
-              text-white
-            "
-          >
-            Copy
-          </button>
+            <Button
+              variant="success"
+              onClick={handleCopy}
+            >
+              Copy
+            </Button>
 
-        </div>
+          </div>
+
+        </Card>
 
         {error && (
+
+          <Card
+            className="
+              border-red-500
+              bg-red-900/20
+            "
+          >
+
             <div
-                className="
-                bg-red-900/30
-                border border-red-500
-                rounded
-                p-3
+              className="
                 text-red-300
                 font-mono
                 text-sm
-                "
+              "
             >
 
-                <div>
+              <div>
                 {error.message}
-                </div>
+              </div>
 
-                {error.line && (
+              {error.line && (
                 <div className="mt-1">
 
-                    Line:
-                    {" "}
-                    {error.line}
+                  Line:
+                  {" "}
+                  {error.line}
 
-                    {" | "}
+                  {" | "}
 
-                    Column:
-                    {" "}
-                    {error.column}
+                  Column:
+                  {" "}
+                  {error.column}
 
                 </div>
-                )}
+              )}
 
             </div>
-            )}
 
-        <JsonViewer formatted={formatted} />
-        <JsonTreeViewer formatted={formatted} />
+          </Card>
+        )}
+
+        <Card>
+
+          <JsonViewer
+            formatted={formatted}
+          />
+
+        </Card>
+
+        <Card>
+
+          <JsonTreeViewer
+            formatted={formatted}
+          />
+
+        </Card>
 
       </div>
 

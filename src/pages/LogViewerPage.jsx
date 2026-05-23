@@ -3,6 +3,7 @@ import { useState } from "react";
 import Layout from "../components/common/Layout";
 import ImageUpload from "../components/logviewer/ImageUpload";
 import ParsedLogViewer from "../components/logviewer/ParsedLogViewer";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
 import { extractTextFromImage } from "../utils/log/extractTextFromImage";
 import { parseLogText } from "../utils/log/parseLogText";
@@ -103,12 +104,19 @@ export default function LogViewerPage() {
         <ImageUpload onUpload={handleUpload} />
 
         {loading && (
-          <div className="text-zinc-400">
-            OCR 분석 중...
-          </div>
+          <LoadingSpinner
+            text="OCR 분석 중..."
+          />
         )}
 
-        <div className="grid grid-cols-2 gap-4">
+        <div
+          className="
+            grid
+            grid-cols-1
+            md:grid-cols-2
+            gap-4
+          "
+        >
 
           <div>
             <h3 className="font-bold mb-2">
@@ -140,7 +148,9 @@ export default function LogViewerPage() {
 
         </div>
 
-        <ParsedLogViewer logs={logs} />
+        <div className="overflow-x-auto">
+          <ParsedLogViewer logs={logs} />
+        </div>
 
       </div>
     </Layout>
